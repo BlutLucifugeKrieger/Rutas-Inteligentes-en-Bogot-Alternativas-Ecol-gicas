@@ -39,7 +39,7 @@ export class PredictComponent implements AfterViewInit {
   modalMessage: string = '';
   responses: boolean = false;
   responses2: boolean = false;
-  distanciaTrayecto: number = 0;  // Distancia en kilómetros
+  distanciaTrayecto: number = 0;  
   
 
   private apiKey = 'ea557625ad034f98aed25148242111';
@@ -69,14 +69,14 @@ export class PredictComponent implements AfterViewInit {
 
     this.rlService.loadModel().subscribe(
       (loadResponse) => {
-        // Aquí puedes manejar la respuesta del observable y asignar el valor a 'responses'
+        
         this.responses = true;
 
         this.rlService.predict(this.state).subscribe(
 
 
           (loadResponse) => {
-            // Aquí puedes manejar la respuesta del observable y asignar el valor a 'responses'
+          
             this.responses2 = true;
 
 
@@ -86,13 +86,13 @@ export class PredictComponent implements AfterViewInit {
               (response) => {
                 if (response.restricted) {
                   this.modalMessage = "Hoy no puedes circular con tu vehículo, por ende, te brindaremos una ruta alterna para ciclistas.";
-                  this.showModal2 = true; // Muestra el modal 2
+                  this.showModal2 = true; 
                   this.trazarRuta3(response.bike_routes, true); // Ruta alterna para ciclistas
                 } else {
                   this.trazarRuta(response.recommended_route, false); // Ruta recomendada para automóvil
                   this.modalMessage = "¡Llegaste al destino!";
                   setTimeout(() => {
-                    this.showModal1 = true; // Muestra el modal después de unos segundos
+                    this.showModal1 = true; 
                   }, 14000);
                 }
               },
@@ -106,7 +106,7 @@ export class PredictComponent implements AfterViewInit {
 
           },
           (error) => {
-            // Aquí puedes manejar el error si ocurre
+         
             console.error('Error al predecir con el modelo:', error);
             this.responses = false;
           }
@@ -117,7 +117,7 @@ export class PredictComponent implements AfterViewInit {
 
       },
       (error) => {
-        // Aquí puedes manejar el error si ocurre
+        
         console.error('Error al cargar el modelo:', error);
         this.responses = false;
       }
@@ -292,18 +292,18 @@ export class PredictComponent implements AfterViewInit {
     if (this.stepIndex < this.route.length) {
       const step = this.route[this.stepIndex];
   
-      // Mueve el carro al siguiente punto
+      
       this.carMarker.setPosition(step.start_location);
   
-      // Incrementa el índice de los pasos
+     
       this.stepIndex++;
   
-      // Llama a la función nuevamente para continuar moviendo el carro
+     
       setTimeout(() => {
         this.moverCarro2();
-      }, 500); // El carro se mueve cada 500 ms para una animación más fluida
+      }, 500); 
     } else {
-      // Cuando el carro llega al destino, muestra el modal
+     
       this.mostrarModal3();
     }
   }
