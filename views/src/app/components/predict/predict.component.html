@@ -1,0 +1,65 @@
+<div class="form-container">
+  <div>
+    <label for="origen" class="form-label">Dirección Origen:</label>
+    <input id="origen" type="text" class="form-input" [(ngModel)]="direccionOrigen" placeholder="Ingresa la dirección de origen" />
+  </div>
+  <br />
+  <div>
+    <label for="destino" class="form-label">Dirección Destino:</label>
+    <input id="destino" type="text" class="form-input" [(ngModel)]="direccionDestino" placeholder="Ingresa la dirección de destino" />
+  </div>
+  <br />
+
+  <div>
+    <label for="placa" class="form-label">Placa del Vehículo:</label>
+    <input id="placa" type="text" class="form-input" [(ngModel)]="placa" placeholder="Ingresa la placa del vehículo" />
+  </div>
+  <br />
+
+  <button (click)="realizarPrediccion()" class="btn-primary">Predecir la ruta óptima</button>
+</div>
+
+<!-- Contenedor para el mapa -->
+<div id="map" style="height: 500px;"></div>
+
+
+<div *ngIf="showModal1" class="modal-overlay" id="modal1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <h2>¡Llegaste al destino!</h2>
+      <br />
+      <p><strong>Tiempo estimado:</strong> {{ tiempoEstimado }}</p>
+      <p><strong>Gasolina gastada:</strong> {{ gasolinaGastada }} litros</p>
+      <p><strong>Distancia del trayecto:</strong> {{ distanciaTrayecto }} km</p>
+      <p><strong>Costo del trayecto:</strong> {{ costoTrayecto | currency:'COP':'symbol-narrow':'1.0-0' }} COP</p>
+      <p><strong>Clima actual:</strong> {{ clima }}</p>
+      <button (click)="cerrarModal1()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showModal2" class="modal-overlay" id="modal2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <h2>¡Pico y Placa!</h2>
+      <br />
+      <p>Hoy no puedes circular con tu vehículo, te brindaremos una ruta alterna para ciclistas.</p>
+      <button (click)="cerrarModal2()">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showModal3" class="modal-overlay" id="modal3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <h2>¡Llegaste al destino!</h2>
+      <br />
+      <p><strong>Tiempo estimado:</strong> {{ tiempoEstimado }}</p>
+      <p><strong>Clima actual:</strong> {{ clima }}</p>
+      <p><strong>Distancia del trayecto:</strong> {{ distanciaTrayecto }} km</p>
+      <button (click)="cerrarModal3()">Cerrar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+Flask
+googlemaps
+tensorflow
+gym
+numpy
+flask_cors
