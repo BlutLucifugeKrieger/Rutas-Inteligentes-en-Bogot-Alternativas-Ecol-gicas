@@ -98,7 +98,7 @@ def is_restricted(last_digit, current_day):
         "Thursday": [7, 8],
         "Friday": [9, 0]
 
-    }app
+    }
     restricted_digits = restrictions.get(current_day, [])
     return int(last_digit) in restricted_digits
 
