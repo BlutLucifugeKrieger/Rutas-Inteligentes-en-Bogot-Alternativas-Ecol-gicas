@@ -67,11 +67,5 @@ class RLAgent:
         self.model.save(self.model_save_path)
         print(f"Modelo guardado en {self.model_save_path}")
 
-    def plot_rewards(self):
-        """Genera una gráfica de las recompensas acumuladas."""
-        plt.plot(self.episode_rewards)
-        plt.xlabel("Episodio")
-        plt.ylabel("Recompensa Acumulada")
-        plt.title("Progreso del Entrenamiento")
-        plt.show()
+
 

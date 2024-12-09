@@ -96,7 +96,8 @@ def is_restricted(last_digit, current_day):
         "Tuesday": [3, 4],
         "Wednesday": [5, 6],
         "Thursday": [7, 8],
-        "Friday": [9, 0]
+        "Friday": [9, 0],
+        "Sunday":[1, 2]
 
     }
     restricted_digits = restrictions.get(current_day, [])
@@ -126,6 +127,36 @@ def predict():
         return jsonify({"action": int(action)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+    
+
+@app.route("/train", methods=["POST"])
+def train_agent():
+    data = request.json
+
+    # Extraer datos necesarios
+    state = data.get("state")
+    action = data.get("action")
+    reward = data.get("reward")
+    next_state = data.get("next_state")
+    done = data.get("done", False)  # Default en caso de no estar presente
+
+    # Validar los datos recibidos
+    if state is None or action is None or reward is None or next_state is None:
+        return jsonify({"error": "Se requiere state, action, reward y next_state"}), 400
+
+    try:
+        # Convertir datos a formatos compatibles con el modelo
+        state = np.reshape(state, [1, agent.state_size])
+        next_state = np.reshape(next_state, [1, agent.state_size])
+
+        # Entrenar al agente
+        agent.train(state, action, reward, next_state, done)
+
+        return jsonify({"message": "Entrenamiento completado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == "__main__":
