@@ -12,7 +12,38 @@ CORS(app)
 
 # Inicializar el agente y el servicio de Google Maps
 agent = RLAgent(state_size=4, action_size=4)  # Ajustar tamaños según sea necesario
-google_maps = GoogleMapsService(api_key="AIzaSyAv5SR6SwQUKbcoG-hlwep5ToGH05X03xY")
+google_maps = GoogleMapsService(api_key="AIzaSyAv5SR6SwQUKbcoG-hlwep5ToGH05X03xY") ## Agrega tu api key de google maps
+
+
+def process_route(google_response):
+
+    try:
+        # Verifica que haya rutas en la respuesta
+        if not google_response.get("routes"):
+            return None
+
+        # Toma la primera ruta como la recomendada
+        route = google_response["routes"][0]
+
+        # Extrae información relevante
+        processed_route = {
+            "summary": route.get("summary", "Ruta sin nombre"),
+            "distance": route["legs"][0]["distance"]["text"],  # Distancia total
+            "duration": route["legs"][0]["duration"]["text"],  # Duración total
+            "steps": [
+                {
+                    "instruction": step["html_instructions"],
+                    "distance": step["distance"]["text"],
+                    "duration": step["duration"]["text"]
+                }
+                for step in route["legs"][0]["steps"]
+            ]
+        }
+        return processed_route
+    except KeyError as e:
+        print(f"Error al procesar la ruta: clave faltante {e}")
+        return None
+
 
 
 @app.route("/route", methods=["POST"])
@@ -96,8 +127,8 @@ def is_restricted(last_digit, current_day):
         "Tuesday": [3, 4],
         "Wednesday": [5, 6],
         "Thursday": [7, 8],
-        "Friday": [9, 0],
-        "Sunday":[1, 2]
+        "Friday": [9, 0]
+
 
     }
     restricted_digits = restrictions.get(current_day, [])
@@ -128,7 +159,7 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    
+
 
 @app.route("/train", methods=["POST"])
 def train_agent():

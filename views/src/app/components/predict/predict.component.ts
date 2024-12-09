@@ -361,8 +361,3 @@ export class PredictComponent implements AfterViewInit {
 
 
 }
-
-
-  
-  
-
