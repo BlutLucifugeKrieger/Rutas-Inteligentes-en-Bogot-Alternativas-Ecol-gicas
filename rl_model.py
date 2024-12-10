@@ -44,23 +44,15 @@ class RLAgent:
         target_f = self.model.predict(state, verbose=0)
         target_f[0][action] = target
 
-        # Entrenamiento del modelo
         self.model.fit(state, target_f, epochs=1, verbose=0)
 
-        # Logs de entrenamiento
-
-        print(f"Training - State: {state}, Action: {action}, Reward: {reward}, Done: {done}")
-        print(f"Epsilon: {self.epsilon}")
-
+        # Ajustar epsilon para exploración/explotación
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
-        # Registra recompensa
+        # Guardar automáticamente después de cada episodio
         if done:
-            self.episode_rewards.append(reward)
-
-        # Guardar el modelo automáticamente después del entrenamiento
-        self.save_model()
+            self.save_model()
 
     def save_model(self):
         """Guarda el modelo entrenado."""

@@ -166,27 +166,62 @@ def train_agent():
     data = request.json
 
     # Extraer datos necesarios
-    state = data.get("state")
-    action = data.get("action")
-    reward = data.get("reward")
-    next_state = data.get("next_state")
-    done = data.get("done", False)  # Default en caso de no estar presente
+    origin = data.get("origin")
+    destination = data.get("destination")
+    reward = data.get("reward", 1)  # Recompensa por defecto si no se provee
+    done = data.get("done", False)  # Finalización de episodio
 
-    # Validar los datos recibidos
-    if state is None or action is None or reward is None or next_state is None:
-        return jsonify({"error": "Se requiere state, action, reward y next_state"}), 400
+    if not origin or not destination:
+        return jsonify({"error": "Se requiere origin y destination"}), 400
 
     try:
-        # Convertir datos a formatos compatibles con el modelo
+        # Llama al servicio de Google Maps
+        route = google_maps.calculate_route(origin, destination)
+        if not route:
+            return jsonify({"error": "No se pudo obtener la ruta desde Google Maps"}), 500
+
+        # Procesa datos de la ruta para crear estados y acciones
+        state = extract_state_from_route(route)
+        next_state = simulate_next_state(state)
+
+        # Ajusta recompensas según la información de la ruta
+        reward = calculate_reward(route, reward)
+
+        # Entrena al agente
         state = np.reshape(state, [1, agent.state_size])
         next_state = np.reshape(next_state, [1, agent.state_size])
+        action = agent.act(state)
 
-        # Entrenar al agente
         agent.train(state, action, reward, next_state, done)
 
         return jsonify({"message": "Entrenamiento completado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def extract_state_from_route(route):
+    """Extrae el estado basado en los datos de la ruta."""
+    distance = route['legs'][0]['distance']['value']  # En metros
+    duration = route['legs'][0]['duration']['value']  # En segundos
+    traffic_delay = route['legs'][0].get('duration_in_traffic', {}).get('value', 0)
+
+    # Escala valores (opcional según tu modelo)
+    state = [distance / 1000.0, duration / 60.0, traffic_delay / 60.0]
+    return state
+
+def simulate_next_state(current_state):
+    """Simula el próximo estado basado en alguna heurística."""
+    # Para simplificar, podemos retornar el mismo estado.
+    return current_state
+
+def calculate_reward(route, base_reward):
+    """Calcula una recompensa ajustada basada en factores de la ruta."""
+    distance = route['legs'][0]['distance']['value']  # En metros
+    duration = route['legs'][0]['duration']['value']  # En segundos
+    traffic_delay = route['legs'][0].get('duration_in_traffic', {}).get('value', 0)
+
+    # Penaliza duraciones largas o grandes demoras por tráfico
+    reward = base_reward - (duration / 60.0) - (traffic_delay / 60.0)
+    return max(reward, -10)  # Limita a un mínimo de recompensa negativa
 
 
 
