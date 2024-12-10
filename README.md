@@ -8,7 +8,7 @@ enfocándose en ofrecer alternativas sostenibles y eficientes frente al reto del
 
 ## Descripción
 
-El sistema analiza la situación del tráfico y el clima para sugerir las mejores rutas para los usuarios, teniendo en cuenta tanto los vehículos como las opciones ecológicas para ciclistas. 
+El sistema brinda las mejores rutas para los usuarios, teniendo en cuenta tanto los vehículos como las opciones ecológicas para ciclistas. 
 
 ### Características principales:.
 - **Integración con Google Maps**: Utiliza la API de Google Maps para la geocodificación y trazado de rutas.
