@@ -47,17 +47,25 @@ Para ejecutar este proyecto en tu máquina local, asegúrate de tener los siguie
    ```bash
    npm install
    
-### 2. **Frontend**
+###  **Ejecución del backend**
+- **Flask**
 
-- **Angular**: Para la interfaz de usuario.
-- **Axios**: Para la interacción con la API backend.
 
-#### Instalación de dependencias:
+  Ejecuta la aplicacion Flask con el siguiente comando:
+   ```bash
+   python app.py
 
-Ejecuta el siguiente comando para instalar las dependencias necesarias:
+###  **Configuración y ejecución de la aplicación**
+
+
+- Ejecuta la aplicación Angular con el siguiente comando:
+
 
 ```bash
-npm install
+ng serve
+
+
+
 
 
 
