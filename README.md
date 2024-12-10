@@ -63,11 +63,3 @@ Para ejecutar este proyecto en tu máquina local, asegúrate de tener los siguie
 
 ```bash
 ng serve
-
-
-
-
-
-
-
-
